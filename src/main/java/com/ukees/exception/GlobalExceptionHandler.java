@@ -3,6 +3,7 @@ package com.ukees.exception;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,8 +24,8 @@ public class GlobalExceptionHandler {
 
 	@ResponseBody
 	@ResponseStatus(HttpStatus.FORBIDDEN)
-	@ExceptionHandler({AccessDeniedException.class})
-	public ErrorResponse handleAccessDenied(AccessDeniedException ex) {
+	@ExceptionHandler({AccessDeniedException.class, BadCredentialsException.class})
+	public ErrorResponse handleAccessDenied(RuntimeException ex) {
 		log.warn(ACCESS_DENIED_CODE, ex);
 		return new ErrorResponse(ex.getMessage(), ACCESS_DENIED_CODE);
 	}

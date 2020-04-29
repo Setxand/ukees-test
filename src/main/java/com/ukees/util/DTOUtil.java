@@ -26,4 +26,13 @@ public class DTOUtil {
 
 		return employeeDTO;
 	}
+
+	public static Employee toEmployee(EmployeeDTO dto) {
+		Employee employee = new Employee();
+		employee.setId(dto.id);
+		employee.setActive(true);
+		employee.setName(dto.name);
+		employee.setDepartmentId(dto.departmentId);
+		return employee;
+	}
 }

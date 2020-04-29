@@ -11,4 +11,10 @@ public class Employee extends User {
 	private Boolean active;
 	private String departmentId;
 
+	@Override
+	public String toString() {
+		return "active=" + active +
+				",name=" + "'" + getName() + "'" +
+				", department_id=" + "'" + departmentId + "'";
+	}
 }

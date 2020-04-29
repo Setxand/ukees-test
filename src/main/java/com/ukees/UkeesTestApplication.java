@@ -13,8 +13,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
-
 @SpringBootApplication
 public class UkeesTestApplication {
 

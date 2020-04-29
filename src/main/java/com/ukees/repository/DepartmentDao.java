@@ -13,7 +13,7 @@ import static com.ukees.repository.EmployeeDao.*;
 public class DepartmentDao extends Dao {
 
 	public static final String DEPARTMENT_TABLE_NAME = "department";
-	static final String DEPARTMENT_NAME_FIELD = "name";
+	public static final String DEPARTMENT_NAME_FIELD = "name";
 	static final String DEPARTMENT_FIELD_PREFIX = "d";
 	private static final String[] FIELD_NAMES = {ID_FIELD, DEPARTMENT_NAME_FIELD};
 
@@ -23,13 +23,15 @@ public class DepartmentDao extends Dao {
 					EQUALS + EMPLOYEE_FIELD_PREFIX + DOT + EMPLOYEE_DEPARTMENT_FOREIGN_KEY_FIELD);
 	private static final String DEPARTMENT_BY_ID_FIELD_SELECTION_SECTION =
 			"d.id as d_id, e.id as e_id, d.name as d_name, e.name as e_name, e.active, e.department_id";
+
+
 	/**
 	 * SELECT DEPARTMENT BY ID QUERY
 	 */
 	private static final String GET_DEPARTMENT_BY_ID_QUERY = createSelectQuery(
 			DEPARTMENT_BY_ID_FIELD_SELECTION_SECTION,
 			DEPARTMENT_TABLE_NAME + SPACE + DEPARTMENT_FIELD_PREFIX + LEFT_JOIN_JOR_DEPARTMENT_BY_ID_SECTION,
-			DEPARTMENT_FIELD_PREFIX + DOT + ID_FIELD + EQUALS + QUESTION_MARK);
+			DEPARTMENT_FIELD_PREFIX + DOT + ID_FIELD + EQUALS + quotes(INPUT_VARIABLE));
 
 	/**
 	 * INSERT NEW DEPARTMENT QUERY
@@ -39,7 +41,7 @@ public class DepartmentDao extends Dao {
 
 
 	/**
-	 * SELECT DEPARTMENT NAMES ONLY
+	 * SELECT DEPARTMENT NAMES ONLY QUERY
 	 */
 	private static final String GET_DEPARTMENTS_QUERY = createSelectQuery(STAR, DEPARTMENT_TABLE_NAME);
 
@@ -62,14 +64,15 @@ public class DepartmentDao extends Dao {
 	}
 
 	public Department getDepartmentById(String departmentId) {
-		return getJdbcTemplate()
-				.queryForObject(GET_DEPARTMENT_BY_ID_QUERY, new Object[]{departmentId}, rowMapper);
+		List<Department> result = getJdbcTemplate()
+				.query(String.format(GET_DEPARTMENT_BY_ID_QUERY, departmentId), rowMapper);
+
+		assert result.size() == 1;
+		return result.get(0);
 	}
 
 	public List<Department> getDepartments() {
-		return getJdbcTemplate().query(GET_DEPARTMENTS_QUERY, (rs, rowNum) ->
-			new Department(rs.getString(ID_FIELD), rs.getString(DEPARTMENT_NAME_FIELD))
-		);
+		return getJdbcTemplate().query(GET_DEPARTMENTS_QUERY, DaoUtil::department);
 	}
 
 	private String insert(String insertDepartmentQuery, String employeeValues) {

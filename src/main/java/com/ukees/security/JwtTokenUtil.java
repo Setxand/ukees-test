@@ -23,7 +23,7 @@ public class JwtTokenUtil implements Serializable {
 	@Value("${jwt.secret}")
 	private String secret;
 
-	public String getuserIdFromToken(String token) {
+	public String getUserIdFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
@@ -48,7 +48,7 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
-		final String username = getuserIdFromToken(token);
+		final String username = getUserIdFromToken(token);
 		return (username.equals(userDetails.getUsername()));
 	}
 

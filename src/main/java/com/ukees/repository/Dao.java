@@ -15,7 +15,6 @@ import static com.ukees.repository.EmployeeDao.*;
 import static com.ukees.repository.UserDao.USER_EMAIL_FIELD;
 import static com.ukees.repository.UserDao.USER_PASSWORD_FIELD;
 
-@Getter
 @Primary
 @Component
 public abstract class Dao {
@@ -33,11 +32,20 @@ public abstract class Dao {
 	static final String UNDERSCORE = "_";
 	static final String ID_FIELD = "id";
 	static final String DOT = ".";
+	static final String LIMIT = " LIMIT ";
+	static final String OFFSET = " OFFSET ";
+	static final String AS = " AS";
+	static final String COUNT = "count";
+	static final String ORDER_BY = " ORDER BY ";
+	static final String LIKE = " LIKE ";
+	static final String OR = " OR ";
+	static final String PERCENT = "%";
 
 	private static final String INSERT_QUERY = "INSERT INTO %s (%s) VALUES (%s)";
 	private static final String FOREIGN_KEY = " FOREIGN KEY (%s) REFERENCES %s(%s)";
 	private static final String SELECT_QUERY_CONDITIONAL = "SELECT %s FROM %s WHERE %s";
 	private static final String SELECT_QUERY = "SELECT %s FROM %s";
+	private static final String UPDATE_QUERY = "UPDATE %s SET %s WHERE %s";
 	private static final String LEFT_JOIN = " LEFT JOIN %s ON %s";
 	private static final String CREATE_TABLE_QUERY_PARAM = " create table if not exists ";
 	private static final String ID_QUERY_PARAM = ID_FIELD + " varchar(36) not null PRIMARY KEY ";
@@ -105,16 +113,24 @@ public abstract class Dao {
 		return String.format(SELECT_QUERY, selectionSection, fromSection);
 	}
 
+	protected static String createUpdateQuery(String table, String settingValues, String where) {
+		return String.format(UPDATE_QUERY, table, settingValues, where);
+	}
+
 	@PostConstruct
 	public void createTables() {
 		// Create department table
-		getJdbcTemplate().execute(createTableQuery(DEPARTMENT_TABLE_NAME, varCharField(DEPARTMENT_NAME_FIELD)));
+		jdbcTemplate.execute(createTableQuery(DEPARTMENT_TABLE_NAME, varCharField(DEPARTMENT_NAME_FIELD)));
 
 		// Create employee table
-		getJdbcTemplate().execute(createTableQuery(EMPLOYEE_TABLE_NAME,
+		jdbcTemplate.execute(createTableQuery(EMPLOYEE_TABLE_NAME,
 				varCharField(USER_EMAIL_FIELD), varCharField(USER_PASSWORD_FIELD),
 				varCharField(EMPLOYEE_NAME_FIELD), boolField(EMPLOYEE_ACTIVE_FIELD),
 				varCharField(EMPLOYEE_DEPARTMENT_FOREIGN_KEY_FIELD, UUID_LENGTH) + COMMA +
 						foreignKey(EMPLOYEE_DEPARTMENT_FOREIGN_KEY_FIELD, DEPARTMENT_TABLE_NAME, ID_FIELD)));
+	}
+
+	protected JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
 	}
 }

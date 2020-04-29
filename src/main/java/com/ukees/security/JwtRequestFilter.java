@@ -39,7 +39,7 @@ public class JwtRequestFilter extends GenericFilterBean {
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			jwtToken = requestTokenHeader.substring(7);
 			try {
-				userId = jwtTokenUtil.getuserIdFromToken(jwtToken);
+				userId = jwtTokenUtil.getUserIdFromToken(jwtToken);
 
 				if (!sessionService.validateSession(jwtToken)) throw new AccessDeniedException("Token is disabled");
 
