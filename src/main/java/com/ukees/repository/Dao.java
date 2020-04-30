@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 
+import java.util.Locale;
+
 import static com.ukees.repository.DepartmentDao.DEPARTMENT_NAME_FIELD;
 import static com.ukees.repository.DepartmentDao.DEPARTMENT_TABLE_NAME;
 import static com.ukees.repository.EmployeeDao.*;
@@ -53,6 +55,7 @@ public abstract class Dao {
 	private static final String VARCHAR_TYPE = " varchar";
 	private static final int VARCHAR_DEFAULT_LENGTH = 64;
 	private static final int UUID_LENGTH = 36;
+	private static final String DELETE_QUERY = "DELETE FROM %s WHERE %s";
 
 	@Autowired private JdbcTemplate jdbcTemplate;
 
@@ -107,6 +110,10 @@ public abstract class Dao {
 
 	protected static String createSelectQuery(String selectionSection, String fromSection, String conditionSection) {
 		return String.format(SELECT_QUERY_CONDITIONAL, selectionSection, fromSection, conditionSection);
+	}
+
+	protected static String createDeleteQuery(String table, String conditionSection) {
+		return String.format(DELETE_QUERY, table, conditionSection);
 	}
 
 	protected static String createSelectQuery(String selectionSection, String fromSection) {

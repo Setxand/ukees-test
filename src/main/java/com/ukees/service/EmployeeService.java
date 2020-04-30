@@ -49,4 +49,8 @@ public class EmployeeService {
 
 		employeeDao.updateEmployee(employee);
 	}
+
+	public void deleteEmployee(String employeeId) {
+		employeeDao.deleteEmployeeById(employeeId);
+	}
 }

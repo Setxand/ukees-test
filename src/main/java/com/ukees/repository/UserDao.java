@@ -1,9 +1,11 @@
 package com.ukees.repository;
 
+import com.ukees.model.Employee;
 import com.ukees.model.User;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 import static com.ukees.repository.EmployeeDao.EMPLOYEE_TABLE_NAME;

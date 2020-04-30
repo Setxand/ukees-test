@@ -55,10 +55,20 @@ public class EmployeeDao extends Dao {
 			COUNT + LEFT_BRACE + STAR + RIGHT_BRACE + SPACE + AS + SPACE + ROW_COUNT_NAME,
 			EMPLOYEE_TABLE_NAME);
 
+	/**
+	 * 	UPDATE EMPLOYEE QUERY
+	 */
 	private static final String UPDATE_EMPLOYEE_QUERY = createUpdateQuery(
 			EMPLOYEE_TABLE_NAME,
 			INPUT_VARIABLE,
 			ID_FIELD + EQUALS + quotes(INPUT_VARIABLE));
+
+
+	/**
+	 * DELETE EMPLOYEE QUERY
+	 */
+	private static final String DELETE_EMPLOYEE_QUERY =
+			createDeleteQuery(EMPLOYEE_TABLE_NAME, ID_FIELD + EQUALS + quotes(INPUT_VARIABLE));
 
 	/**
 	 * TOTAL COUNT OF EMPLOYEES QUERY CONDITIONAL
@@ -67,7 +77,7 @@ public class EmployeeDao extends Dao {
 		return createSelectQuery(
 				COUNT + LEFT_BRACE + STAR + RIGHT_BRACE + SPACE + AS + SPACE + ROW_COUNT_NAME,
 				EMPLOYEE_TABLE_NAME,
-				EMPLOYEE_NAME_FIELD + LIKE + quotes(PERCENT + search + PERCENT));
+				EMPLOYEE_NAME_FIELD + LIKE + quotes(PERCENT + search));
 	}
 
 	/**
@@ -132,10 +142,8 @@ public class EmployeeDao extends Dao {
 		getJdbcTemplate().execute(String.format(UPDATE_EMPLOYEE_QUERY, employee, employee.getId()));
 	}
 
-
-
-	private String searchQueryVariables(String searchQueryPageable, int pageSize, long offset) {
-		return String.format(searchQueryPageable, pageSize, offset);
+	public void deleteEmployeeById(String employeeId) {
+		getJdbcTemplate().execute(String.format(DELETE_EMPLOYEE_QUERY, employeeId));
 	}
 
 	private int getTotalEmployees() {

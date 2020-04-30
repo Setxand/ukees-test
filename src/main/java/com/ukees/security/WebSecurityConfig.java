@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import springfox.documentation.swagger.readers.parameter.SwaggerExpandedParameterBuilder;
 
 @Configuration
 @EnableWebMvc
@@ -38,7 +39,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.cors().and().csrf().disable()
 				.authorizeRequests().antMatchers("/signup").permitAll()
 				.antMatchers("/login").permitAll()
-				.antMatchers("/v1/departments-names").permitAll().
+				.antMatchers("/v1/departments-names").permitAll()
+				.antMatchers(
+						"/v2/api-docs",
+						"/swagger-resources/**",
+						"/swagger-ui.html",
+						"/webjars/**" ,
+						/*Probably not needed*/ "/swagger.json")
+				.permitAll().
 				anyRequest().authenticated().and().exceptionHandling().disable();
 
 

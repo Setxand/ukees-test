@@ -30,7 +30,7 @@ public class DTOUtil {
 	public static Employee toEmployee(EmployeeDTO dto) {
 		Employee employee = new Employee();
 		employee.setId(dto.id);
-		employee.setActive(true);
+		employee.setActive(dto.isActive);
 		employee.setName(dto.name);
 		employee.setDepartmentId(dto.departmentId);
 		return employee;

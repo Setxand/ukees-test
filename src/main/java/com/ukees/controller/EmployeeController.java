@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Map;
 
@@ -37,8 +38,9 @@ public class EmployeeController {
 		employeeService.editEmployee(dto);
 	}
 
-	@DeleteMapping("/{employeeId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@DeleteMapping("/v1/employees/{employeeId}")
 	public void deleteEmployee(@PathVariable String employeeId) {
-
+		employeeService.deleteEmployee(employeeId);
 	}
 }
